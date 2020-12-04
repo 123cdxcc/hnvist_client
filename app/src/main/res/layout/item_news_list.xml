@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/item_news_list_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/item_news_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:textSize="15dp"
+            android:textColor="#000"
+            android:text="我院开展“祖国和我们”主题团课"/>
+        <TextView
+            android:id="@+id/item_news_list_desc"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:text="为深入推进“青年大学习”行动，全面提升团……"/>
+        <TextView
+            android:id="@+id/item_news_list_pushTime"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="right"
+            android:text="2019-12-11"/>
+    </LinearLayout>
+
+</LinearLayout>
