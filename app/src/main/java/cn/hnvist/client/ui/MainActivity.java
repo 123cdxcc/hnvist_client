@@ -1,8 +1,10 @@
-package cn.hnvist.client;
+package cn.hnvist.client.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import cn.hnvist.client.R;
 
 public class MainActivity extends AppCompatActivity {
 

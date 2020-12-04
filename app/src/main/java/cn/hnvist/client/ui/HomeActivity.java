@@ -1,6 +1,5 @@
-package cn.hnvist.client;
+package cn.hnvist.client.ui;
 
-import android.icu.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.hnvist.client.R;
 import cn.hnvist.client.adapter.NewsItemAdapter;
 import cn.hnvist.client.bean.NewsBean;
 import cn.hnvist.client.result.NewsListResult;
