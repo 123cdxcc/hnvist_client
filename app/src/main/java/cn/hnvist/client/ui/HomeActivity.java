@@ -1,8 +1,11 @@
 package cn.hnvist.client.ui;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -71,10 +74,9 @@ public class HomeActivity extends AppCompatActivity {
                             data.add(new NewsBean(i, dataBean.getImage(), dataBean.getName(), dataBean.getDesc() + "……", dataBean.getPublishTime()));
                         }
                     } else {
-                        Toast.makeText(HomeActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+                        runOnUiThread(()-> Toast.makeText(HomeActivity.this, "数据异常", Toast.LENGTH_SHORT).show());
+
                     }
-                    // Log.e("数据报告", );
-//                    data.forEach(System.out::println);
                     runOnUiThread(()-> adapter.notifyDataSetChanged());
                 }
             });
@@ -89,6 +91,13 @@ public class HomeActivity extends AppCompatActivity {
         client = new OkHttpClient();
 
         honeNewsList.setAdapter(adapter);
+        honeNewsList.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id)-> {
+//            Toast.makeText(this, data.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+/*            Intent intent = new Intent(this, ArticleActivity.class);
+            intent.putExtra("id", data.get(position).getId());
+            startActivity(intent);*/
+            ArticleActivity.actionStart(data.get(position).getId() + "");
+        });
     }
 
     @Override
