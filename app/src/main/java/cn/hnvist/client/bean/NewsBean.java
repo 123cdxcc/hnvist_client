@@ -6,13 +6,23 @@ public class NewsBean {
     private String title;
     private String desc;
     private String pushTime;
+    private String lastTime;
 
-    public NewsBean(String id, String imgUrl, String title, String desc, String pushTime) {
+    public NewsBean(String id, String imgUrl, String title, String desc, String pushTime, String lastTime) {
         this.id = id;
         this.imgUrl = imgUrl;
         this.title = title;
         this.desc = desc;
         this.pushTime = pushTime;
+        this.lastTime = lastTime;
+    }
+
+    public String getLastTime() {
+        return lastTime;
+    }
+
+    public void setLastTime(String lastTime) {
+        this.lastTime = lastTime;
     }
 
     public String getId() {
@@ -53,5 +63,16 @@ public class NewsBean {
 
     public void setPushTime(String pushTime) {
         this.pushTime = pushTime;
+    }
+
+    @Override
+    public String toString() {
+        return "NewsBean{" +
+                "id='" + id + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", desc='" + desc + '\'' +
+                ", pushTime='" + pushTime + '\'' +
+                '}';
     }
 }

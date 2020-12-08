@@ -167,6 +167,39 @@ public class NewsListResult {
             public void setImageList(List<?> imageList) {
                 this.imageList = imageList;
             }
+
+            @Override
+            public String toString() {
+                return "DataBean{" +
+                        "type='" + type + '\'' +
+                        ", id='" + id + '\'' +
+                        ", image='" + image + '\'' +
+                        ", name='" + name + '\'' +
+                        ", desc='" + desc + '\'' +
+                        ", author=" + author +
+                        ", content='" + content + '\'' +
+                        ", publishTime='" + publishTime + '\'' +
+                        ", loadTime='" + loadTime + '\'' +
+                        ", imageList=" + imageList +
+                        '}';
+            }
         }
+
+        @Override
+        public String toString() {
+            return "JsonpBean{" +
+                    "status=" + status +
+                    ", code=" + code +
+                    ", msg='" + msg + '\'' +
+                    ", data=" + data +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NewsListResult{" +
+                "jsonp=" + jsonp +
+                '}';
     }
 }
