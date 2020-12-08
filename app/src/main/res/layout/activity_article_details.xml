@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -11,11 +12,15 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/a_article_topAppBar"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="文章详情" />
+            android:paddingRight="?actionBarSize"
+            android:scrollbarDefaultDelayBeforeFade="@android:integer/config_longAnimTime"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_scrollFlags="snap"
+            app:navigationIcon="@drawable/ic_action_go_back" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -24,17 +29,54 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/a_article_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
+            android:descendantFocusability="blocksDescendants"
             android:fillViewport="true"
-            android:descendantFocusability="blocksDescendants">
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="15dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp">
+
+                    <TextView
+                        android:id="@+id/a_article_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="安院首席编辑"
+                            android:textColor="#900F" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:text="很久以前" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <WebView
                     android:id="@+id/a_article_body"
@@ -45,40 +87,38 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="点赞"/>
+                        android:text="点赞" />
                 </LinearLayout>
 
             </LinearLayout>
-
         </ScrollView>
+
 
         <LinearLayout
             android:id="@+id/a_article_loadview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:background="#FFF"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
-           <ProgressBar
-               android:layout_width="30dp"
-               android:layout_height="30dp"
-               android:layout_marginBottom="10dp"/>
+            <ProgressBar
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="数据加载中…"/>
+                android:text="数据加载中…" />
 
         </LinearLayout>
 
     </RelativeLayout>
-
-
-
 
 </LinearLayout>
