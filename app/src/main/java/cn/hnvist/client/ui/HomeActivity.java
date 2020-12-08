@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
                     if ( 200 == newsListResult.getJsonp().getCode()){
                         for (int i = 0; i < newsListResult.getJsonp().getData().size(); i++) {
                             NewsListResult.JsonpBean.DataBean dataBean = newsListResult.getJsonp().getData().get(i);
-                            data.add(new NewsBean(i, dataBean.getImage(), dataBean.getName(), dataBean.getDesc() + "……", dataBean.getPublishTime()));
+                            data.add(new NewsBean(dataBean.getId(), dataBean.getImage(), dataBean.getName(), dataBean.getDesc() + "……", dataBean.getPublishTime()));
                         }
                     } else {
                         runOnUiThread(()-> Toast.makeText(HomeActivity.this, "数据异常", Toast.LENGTH_SHORT).show());
@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
 /*            Intent intent = new Intent(this, ArticleActivity.class);
             intent.putExtra("id", data.get(position).getId());
             startActivity(intent);*/
-            ArticleActivity.actionStart(data.get(position).getId() + "");
+            ArticleActivity.actionStart(data.get(position).getId());
         });
     }
 

@@ -1,13 +1,13 @@
 package cn.hnvist.client.bean;
 
 public class NewsBean {
-    private int id;
+    private String id;
     private String imgUrl;
     private String title;
     private String desc;
     private String pushTime;
 
-    public NewsBean(int id, String imgUrl, String title, String desc, String pushTime) {
+    public NewsBean(String id, String imgUrl, String title, String desc, String pushTime) {
         this.id = id;
         this.imgUrl = imgUrl;
         this.title = title;
@@ -15,11 +15,11 @@ public class NewsBean {
         this.pushTime = pushTime;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
