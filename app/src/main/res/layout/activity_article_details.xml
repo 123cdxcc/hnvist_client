@@ -19,37 +19,66 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:fillViewport="true"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="15dp"
-            android:orientation="vertical">
-
-            <WebView
-                android:id="@+id/a_article_body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#0001" />
+            android:scrollbars="none"
+            android:fillViewport="true"
+            android:descendantFocusability="blocksDescendants">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Button
-                    android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:orientation="vertical">
+
+                <WebView
+                    android:id="@+id/a_article_body"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="点赞"/>
+                    android:background="#0001" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="点赞"/>
+                </LinearLayout>
+
             </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/a_article_loadview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#FFF"
+            android:gravity="center">
+
+           <ProgressBar
+               android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="数据加载中…"/>
 
         </LinearLayout>
 
-    </ScrollView>
+    </RelativeLayout>
+
+
 
 
 </LinearLayout>

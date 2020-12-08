@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -30,6 +34,7 @@ import okhttp3.Response;
 
 public class ArticleActivity extends AppCompatActivity {
 
+    // 启动文章详情 Activity ，必传入文章 ID
     public static void actionStart(String articleID) {
         // 文章 ID 判空
         if (articleID == null && articleID.equals("")) return;
@@ -39,6 +44,7 @@ public class ArticleActivity extends AppCompatActivity {
         Intent intent = new Intent().setClass(context, ArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("articleID", articleID);
+        Log.d(TAG, "onCreate: " + articleID);
         context.startActivity(intent);
     }
 
@@ -46,6 +52,7 @@ public class ArticleActivity extends AppCompatActivity {
     private String mArticleID;
 
     private WebView mWebView;
+    private LinearLayout mLoadView;
 
     public OkHttpClient client;
     public Gson gson = new Gson();
@@ -58,14 +65,19 @@ public class ArticleActivity extends AppCompatActivity {
         Intent intent = getIntent();
         this.mArticleID = intent.getStringExtra("articleID");
 
+        Log.d(TAG, "onCreate: " + mArticleID);
+
         initView();
         loadData();
     }
 
+    // 初始化 view
     private void initView() {
         mWebView = findViewById(R.id.a_article_body);
+        mLoadView = findViewById(R.id.a_article_loadview);
     }
 
+    // 渲染文章详情
     private void renderArticleBody(String htmlStr) {
 
         runOnUiThread(new Runnable() {
@@ -74,107 +86,27 @@ public class ArticleActivity extends AppCompatActivity {
 
                 WebSettings webSettings = mWebView.getSettings();
                 webSettings.setLoadWithOverviewMode(true); // 缩放到屏幕大小
+                webSettings.setAppCacheEnabled(false);
 
                 mWebView.loadData(htmlStr, "text/html", "utf-8");
+
+                mWebView.setWebViewClient(new WebViewClient(){
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        setLoadStart(false);
+                    }
+                });
 
             }
         });
 
     }
 
+    // 加载数据
     private void loadData() {
-        String htmlStr = "<h1 id=\"markdown\">常用 Markdown 语法教程</h1>\n" +
-                "<hr>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"\">引用示例</h3>\n" +
-                "<blockquote>\n" +
-                "  <p>根据 Github 开源项目改编开发，很高兴你的使用</p>\n" +
-                "</blockquote>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"-1\">标题示例</h3>\n" +
-                "<h1 id=\"h1\">这是 H1 标题</h1>\n" +
-                "<h2 id=\"h2\">这是 H2 标题</h2>\n" +
-                "<h3 id=\"h3\">这是 H3 标题</h3>\n" +
-                "<h4 id=\"h4\">这是 H4 标题</h4>\n" +
-                "<h5 id=\"h5\">这是 H5 标题</h5>\n" +
-                "<h6 id=\"h6\">这是 H6 标题</h6></div>" +
-                "<h1 id=\"markdown\">常用 Markdown 语法教程</h1>\n" +
-                "<hr>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"\">引用示例</h3>\n" +
-                "<blockquote>\n" +
-                "  <p>根据 Github 开源项目改编开发，很高兴你的使用</p>\n" +
-                "</blockquote>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"-1\">标题示例</h3>\n" +
-                "<h1 id=\"h1\">这是 H1 标题</h1>\n" +
-                "<h2 id=\"h2\">这是 H2 标题</h2>\n" +
-                "<h3 id=\"h3\">这是 H3 标题</h3>\n" +
-                "<h4 id=\"h4\">这是 H4 标题</h4>\n" +
-                "<h5 id=\"h5\">这是 H5 标题</h5>\n" +
-                "<h6 id=\"h6\">这是 H6 标题</h6></div>" +
-                "<h1 id=\"markdown\">常用 Markdown 语法教程</h1>\n" +
-                "<hr>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"\">引用示例</h3>\n" +
-                "<blockquote>\n" +
-                "  <p>根据 Github 开源项目改编开发，很高兴你的使用</p>\n" +
-                "</blockquote>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"-1\">标题示例</h3>\n" +
-                "<h1 id=\"h1\">这是 H1 标题</h1>\n" +
-                "<h2 id=\"h2\">这是 H2 标题</h2>\n" +
-                "<h3 id=\"h3\">这是 H3 标题</h3>\n" +
-                "<h4 id=\"h4\">这是 H4 标题</h4>\n" +
-                "<h5 id=\"h5\">这是 H5 标题</h5>\n" +
-                "<h6 id=\"h6\">这是 H6 标题</h6></div>" +
-                "<h1 id=\"markdown\">常用 Markdown 语法教程</h1>\n" +
-                "<hr>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"\">引用示例</h3>\n" +
-                "<blockquote>\n" +
-                "  <p>根据 Github 开源项目改编开发，很高兴你的使用</p>\n" +
-                "</blockquote>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"-1\">标题示例</h3>\n" +
-                "<h1 id=\"h1\">这是 H1 标题</h1>\n" +
-                "<h2 id=\"h2\">这是 H2 标题</h2>\n" +
-                "<h3 id=\"h3\">这是 H3 标题</h3>\n" +
-                "<h4 id=\"h4\">这是 H4 标题</h4>\n" +
-                "<h5 id=\"h5\">这是 H5 标题</h5>\n" +
-                "<h6 id=\"h6\">这是 H6 标题</h6></div>" +
-                "<h1 id=\"markdown\">常用 Markdown 语法教程</h1>\n" +
-                "<hr>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"\">引用示例</h3>\n" +
-                "<blockquote>\n" +
-                "  <p>根据 Github 开源项目改编开发，很高兴你的使用</p>\n" +
-                "</blockquote>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"-1\">标题示例</h3>\n" +
-                "<h1 id=\"h1\">这是 H1 标题</h1>\n" +
-                "<h2 id=\"h2\">这是 H2 标题</h2>\n" +
-                "<h3 id=\"h3\">这是 H3 标题</h3>\n" +
-                "<h4 id=\"h4\">这是 H4 标题</h4>\n" +
-                "<h5 id=\"h5\">这是 H5 标题</h5>\n" +
-                "<h6 id=\"h6\">这是 H6 标题</h6></div>" +
-                "<h1 id=\"markdown\">常用 Markdown 语法教程</h1>\n" +
-                "<hr>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"\">引用示例</h3>\n" +
-                "<blockquote>\n" +
-                "  <p>根据 Github 开源项目改编开发，很高兴你的使用</p>\n" +
-                "</blockquote>\n" +
-                "<p><br></p>\n" +
-                "<h3 id=\"-1\">标题示例</h3>\n" +
-                "<h1 id=\"h1\">这是 H1 标题</h1>\n" +
-                "<h2 id=\"h2\">这是 H2 标题</h2>\n" +
-                "<h3 id=\"h3\">这是 H3 标题</h3>\n" +
-                "<h4 id=\"h4\">这是 H4 标题</h4>\n" +
-                "<h5 id=\"h5\">这是 H5 标题</h5>\n" +
-                "<h6 id=\"h6\">这是 H6 标题</h6></div>";
 
-        String url = "http://mob.hnvist.cn/mp/home/newsService/newsDetail?idNews=1607145427469";
+        String url = "http://mob.hnvist.cn/mp/home/newsService/newsDetail?idNews=" + mArticleID;
         if (client == null) {
             client = new OkHttpClient();
         }
@@ -194,6 +126,11 @@ public class ArticleActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String data = response.body().string();
+                if(data.equals("") || data == null) {
+                    toast("文章详情加载失败！！！");
+                    finish();
+                    return;
+                }
                 news = gson.fromJson(data, NewsDetails.class);
                 String aContext = news.getJsonp().getData().getContent();
                 renderArticleBody(aContext);
@@ -202,9 +139,21 @@ public class ArticleActivity extends AppCompatActivity {
             }
         });
 
-        renderArticleBody(htmlStr);
     }
 
+    // 设置页面数据加载状态！
+    private void setLoadStart(boolean isLoad) {
+        if(mLoadView == null) return;
+        if(isLoad) {
+            mLoadView.setVisibility(View.VISIBLE);
+        } else {
+            mLoadView.setVisibility(View.GONE);
+        }
+    }
 
+    // toast 方法封装
+    public void toast(String msg) {
+        runOnUiThread(() -> Toast.makeText(this, msg, Toast.LENGTH_LONG).show());
+    }
 
 }
