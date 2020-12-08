@@ -2,67 +2,67 @@ package cn.hnvist.client.ui;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
-import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.hnvist.client.R;
 import cn.hnvist.client.adapter.NewsItemAdapter;
 import cn.hnvist.client.bean.NewsBean;
-import cn.hnvist.client.result.NewsListResult;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import cn.hnvist.client.ui.model.HomeViewModel;
 
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView honeNewsList;
     private List<NewsBean> data;
     private NewsItemAdapter adapter;
-    private static Gson gson;
-    private static OkHttpClient client;
+    private HomeViewModel viewModel;
 
-    private String lastTime = "";
-
-    private static final String URL = "http://mob.hnvist.cn/mp/home/newsService/getList";
     private SmartRefreshLayout homeRefreshLayout;
-
+    private TextView homeLoading;
+    private int isLoading = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         initView();
-        initData("");
+        initData();
     }
 
-    private void initData(String loadTime) {
+    private void initData() {
 
-        new Thread(() -> {
+        viewModel.getData().observe(this, new Observer<List<NewsBean>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onChanged(List<NewsBean> newsBeans) {
+                if (isLoading == 0){
+                    homeLoading.setVisibility(View.GONE);
+                    homeRefreshLayout.setVisibility(View.VISIBLE);
+                    isLoading++;
+                }
+                Log.e("观察着", "收到数据更新");
+                homeRefreshLayout.finishLoadMore(true);
+                adapter.setNewsBean(newsBeans);
+            }
+        });
+
+        /*new Thread(() -> {
             String requestURL = String.format("%s?lastTime=%s&type=1&size=%s", URL, loadTime, 10);
             Log.e("url", requestURL);
             Request request = new Request.Builder()
@@ -109,16 +109,16 @@ public class HomeActivity extends AppCompatActivity {
 
                 }
             });
-        }).start();
+        }).start();*/
     }
 
     private void initView() {
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         honeNewsList = findViewById(R.id.hone_news_list);
         homeRefreshLayout = (SmartRefreshLayout) findViewById(R.id.home_refreshLayout);
+        homeLoading = (TextView) findViewById(R.id.home_loading);
         data = new ArrayList<>();
         adapter = new NewsItemAdapter(data);
-        gson = new Gson();
-        client = new OkHttpClient();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         honeNewsList.setLayoutManager(linearLayoutManager);
@@ -135,14 +135,8 @@ public class HomeActivity extends AppCompatActivity {
         homeRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                initData(lastTime);
+                 initData();
             }
         });
-    }
-
-    @Override
-    protected void onStop() {
-        client.clone();
-        super.onStop();
     }
 }

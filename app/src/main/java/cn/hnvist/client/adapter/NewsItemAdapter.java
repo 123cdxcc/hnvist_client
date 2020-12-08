@@ -28,6 +28,10 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
         this.data = data;
     }
 
+    public void setNewsBean(List<NewsBean> data){
+        this.data = data;
+        notifyDataSetChanged();
+    }
 
 
     static class NewsViewHolder extends RecyclerView.ViewHolder{
