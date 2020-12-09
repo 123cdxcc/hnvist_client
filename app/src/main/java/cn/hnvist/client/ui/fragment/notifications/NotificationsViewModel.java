@@ -1,4 +1,4 @@
-package cn.hnvist.client.ui.model.ui.notifications;
+package cn.hnvist.client.ui.fragment.notifications;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

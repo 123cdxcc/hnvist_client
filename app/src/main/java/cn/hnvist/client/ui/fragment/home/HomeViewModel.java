@@ -1,4 +1,4 @@
-package cn.hnvist.client.ui.model;
+package cn.hnvist.client.ui.fragment.home;
 
 import android.os.Build;
 import android.util.Log;
@@ -66,7 +66,7 @@ public class HomeViewModel extends ViewModel {
                                 dataBean.getId(),
                                 dataBean.getImage(),
                                 dataBean.getName(),
-                                dataBean.getDesc() + "……",
+                                dataBean.getDesc(),
                                 dataBean.getPublishTime(),
                                 dataBean.getLoadTime()));
                         if (i == size-1){

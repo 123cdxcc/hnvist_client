@@ -1,4 +1,4 @@
-package cn.hnvist.client.ui.model.ui.dashboard;
+package cn.hnvist.client.ui.fragment.dashboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

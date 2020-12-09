@@ -1,4 +1,4 @@
-package cn.hnvist.client.ui.model;
+package cn.hnvist.client.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,16 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import cn.hnvist.client.R;
-import cn.hnvist.client.ui.model.ui.MyActivity;
-import cn.hnvist.client.ui.model.ui.dashboard.DashboardFragment;
-import cn.hnvist.client.ui.model.ui.home.HomeFragment;
-import cn.hnvist.client.ui.model.ui.notifications.NotificationsFragment;
+import cn.hnvist.client.ui.fragment.MyActivity;
+import cn.hnvist.client.ui.fragment.dashboard.DashboardFragment;
+import cn.hnvist.client.ui.fragment.home.HomeFragment;
+import cn.hnvist.client.ui.fragment.notifications.NotificationsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment homeFragment,dashboardFragment,notificationsFragment,myactivity;

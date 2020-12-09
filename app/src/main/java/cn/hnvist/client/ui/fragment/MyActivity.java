@@ -1,8 +1,7 @@
-package cn.hnvist.client.ui.model.ui;
+package cn.hnvist.client.ui.fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
