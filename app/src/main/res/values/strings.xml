@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">掌上安院</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">首页</string>
+    <string name="title_dashboard">消息</string>
+    <string name="title_notifications">发现</string>
+    <string name="title_wode">我的</string>
 </resources>

@@ -42,6 +42,9 @@ dependencies {
     //Glide图片处理框架
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     // 下拉刷新
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.1'      //核心必须依赖
