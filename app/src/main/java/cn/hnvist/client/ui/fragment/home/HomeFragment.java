@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.tabs.TabLayout;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -51,6 +53,9 @@ public class HomeFragment extends Fragment {
         initStart(root);
         initData();
         setBanner(root);
+        TabLayout tab = root.findViewById(R.id.home_tab);
+        tab.addTab(tab.newTab().setText("咨询"));
+        tab.addTab(tab.newTab().setText("班级"));
         return root;
     }
     private void setBanner(View view){
@@ -101,54 +106,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        /*new Thread(() -> {
-            String requestURL = String.format("%s?lastTime=%s&type=1&size=%s", URL, loadTime, 10);
-            Log.e("url", requestURL);
-            Request request = new Request.Builder()
-                    .get()
-                    .url(requestURL)
-                    .build();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
-                }
-
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String body = response.body().string();
-                    NewsListResult newsListResult = gson.fromJson(body, NewsListResult.class);
-                    if (200 == newsListResult.getJsonp().getCode()) {
-                        int size = newsListResult.getJsonp().getData().size();
-                        for (int i = 0; i < size; i++) {
-                            NewsListResult.JsonpBean.DataBean dataBean = newsListResult.getJsonp().getData().get(i);
-                            data.add(new NewsBean(
-                                    dataBean.getId(),
-                                    dataBean.getImage(),
-                                    dataBean.getName(),
-                                    dataBean.getDesc() + "……",
-                                    dataBean.getPublishTime(),
-                                    dataBean.getLoadTime()));
-                            if (i == size-1){
-                                lastTime = newsListResult.getJsonp().getData().get(i).getLoadTime();
-                            }
-                        }
-                    } else {
-                        runOnUiThread(() -> {
-                            homeRefreshLayout.finishLoadMore(false);
-                            Toast.makeText(HomeActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
-                        });
-
-                    }
-                    runOnUiThread(() -> {
-                        homeRefreshLayout.finishLoadMore(true);
-                        adapter.notifyDataSetChanged();
-                    });
-
-                }
-            });
-        }).start();*/
     }
 
     private void initView(View view) {
