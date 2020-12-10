@@ -6,17 +6,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.hnvist.client.R;
+import cn.hnvist.client.adapter.HomeTabFragmentAdapter;
+import cn.hnvist.client.bean.TabBean;
 import cn.hnvist.client.ui.fragment.home.tab.clazz.ClazzFragment;
 import cn.hnvist.client.ui.fragment.home.tab.department.DepartmentFragment;
 import cn.hnvist.client.ui.fragment.home.tab.news.NewsFragment;
@@ -27,9 +34,8 @@ public class HomeFragment extends Fragment {
     private EditText homeSearch;
     private TabLayout homeTab;
     private Context context;
-    private Fragment newsFragment, clazzFragment, departmentFragment;
-    private Fragment[] fragments;
-    private int lastIndex;
+    private ViewPager2 homePager;
+    private HomeTabFragmentAdapter fragmentAdapter;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -49,74 +55,34 @@ public class HomeFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
         init();
-        initListener();
-    }
-
-    // 设置首页tab监听
-    private void initListener() {
-        homeTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int tId = tab.getPosition();
-                switch (tId){
-                    case 0:
-                        if (lastIndex != 0){
-                            switchFragment(lastIndex, 0);
-                            lastIndex = 0;
-                        }
-                        break;
-                    case 1:
-                        if (lastIndex != 1){
-                            switchFragment(lastIndex, 1);
-                            lastIndex = 1;
-                        }
-                        break;
-                    case 2:
-                        if (lastIndex != 2){
-                            switchFragment(lastIndex, 2);
-                            lastIndex = 2;
-                        }
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     private void init() {
-        homeTab.addTab(homeTab.newTab().setText("咨询"));
-        homeTab.addTab(homeTab.newTab().setText("班级"));
-        homeTab.addTab(homeTab.newTab().setText("院部"));
-        // 设置咨询页面为第一页
-        getFragmentManager().beginTransaction().replace(R.id.home_fragment, newsFragment).show(newsFragment).commit();
+        mViewModel.getFragments().observe(this, new Observer<List<TabBean>>() {
+            @Override
+            public void onChanged(List<TabBean> tabBeans) {
+                fragmentAdapter.setTabBean(tabBeans);
+                homePager.setCurrentItem(1);
+                new TabLayoutMediator(homeTab, homePager, true, new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        tab.setText(tabBeans.get(position).getTitle());
+                    }
+                }).attach();
+            }
+        });
+
+
     }
 
     private void initView(View view) {
+        context = view.getContext();
+        fragmentAdapter = new HomeTabFragmentAdapter(this, new ArrayList<>());
         homeSearch = (EditText) view.findViewById(R.id.home_search);
         homeTab = (TabLayout) view.findViewById(R.id.home_tab);
-        newsFragment = NewsFragment.newInstance();
-        clazzFragment = ClazzFragment.newInstance();
-        departmentFragment = DepartmentFragment.newInstance();
-        context = view.getContext();
-        fragments = new Fragment[]{newsFragment, clazzFragment, departmentFragment};
+        homePager = (ViewPager2) view.findViewById(R.id.home_pager);
 
+        homePager.setAdapter(fragmentAdapter);
     }
 
-    private void switchFragment(int lastIndex, int index){
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.hide(fragments[lastIndex]);
-        if (!fragments[index].isAdded()){
-            transaction.add(R.id.home_fragment, fragments[index]);
-        }
-        transaction.show(fragments[index]).commitAllowingStateLoss();
-    }
 }
