@@ -13,15 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.fragment.dashboard.tab.TabFragment"></activity>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ArticleActivity" />
+        <activity android:name=".ui.ArticleActivity"
+            android:theme="@style/MaterialTheme"/>
+        <activity android:name=".ui.WebActivity"
+            android:theme="@style/MaterialTheme"/>
     </application>
 
 </manifest>
