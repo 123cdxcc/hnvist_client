@@ -1,4 +1,4 @@
-package cn.hnvist.client.ui.fragment;
+package cn.hnvist.client.ui.fragment.my;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 
 import cn.hnvist.client.R;
 
-public class MyActivity extends Fragment {
+public class MyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.activity_my,container,false);
+        View view = inflater.inflate(R.layout.fragment_my, container, false);
         return view;
     }
 }
