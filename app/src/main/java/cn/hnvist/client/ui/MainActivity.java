@@ -14,6 +14,7 @@ import cn.hnvist.client.R;
 import cn.hnvist.client.ui.fragment.MyActivity;
 import cn.hnvist.client.ui.fragment.dashboard.DashboardFragment;
 import cn.hnvist.client.ui.fragment.home.HomeFragment;
+import cn.hnvist.client.ui.fragment.home.tab.news.NewsFragment;
 import cn.hnvist.client.ui.fragment.notifications.NotificationsFragment;
 
 public class MainActivity extends AppCompatActivity {

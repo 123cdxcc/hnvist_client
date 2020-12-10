@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#F7F6FB"
     tools:context=".ui.fragment.home.HomeFragment">
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -35,28 +34,8 @@
             app:tabMaxWidth="0dp"
             app:tabSelectedTextColor="#8B1C21"/>
     </androidx.appcompat.widget.Toolbar>
-    <TextView
-        android:id="@+id/home_loading"
+    <FrameLayout
+        android:id="@+id/home_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="正在加载……"
-        android:gravity="center"
-        android:textColor="#000"
-        android:visibility="visible"/>
-
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/home_refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-        <ListView
-            android:id="@+id/hone_news_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#F7F6FB"
-            android:scrollbars="none"
-            android:dividerHeight="10dp"/>
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-
-
+        android:layout_height="match_parent"/>
 </LinearLayout>

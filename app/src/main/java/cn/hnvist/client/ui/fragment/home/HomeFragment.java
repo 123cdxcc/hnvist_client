@@ -1,125 +1,122 @@
 package cn.hnvist.client.ui.fragment.home;
 
-import android.os.Build;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.tabs.TabLayout;
-import com.scwang.smart.refresh.footer.ClassicsFooter;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.youth.banner.Banner;
-import com.youth.banner.indicator.CircleIndicator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.hnvist.client.R;
-import cn.hnvist.client.adapter.BannerImageAdapter;
-import cn.hnvist.client.adapter.NewsAdapter;
-import cn.hnvist.client.bean.BannerBean;
-import cn.hnvist.client.bean.NewsBean;
-import cn.hnvist.client.ui.ArticleActivity;
-
+import cn.hnvist.client.ui.fragment.home.tab.clazz.ClazzFragment;
+import cn.hnvist.client.ui.fragment.home.tab.department.DepartmentFragment;
+import cn.hnvist.client.ui.fragment.home.tab.news.NewsFragment;
 
 public class HomeFragment extends Fragment {
-    private HomeViewModel viewModel;
-    private ListView honeNewsList;
-    private List<NewsBean> data;
-    private NewsAdapter adapter;
-    private SmartRefreshLayout homeRefreshLayout;
-    private TextView homeLoading;
-    private int isLoading = 0;
-    private BannerImageAdapter bannerImageAdapter;
-    private List<BannerBean> bannerData;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    private HomeViewModel mViewModel;
+    private EditText homeSearch;
+    private TabLayout homeTab;
+    private Context context;
+    private Fragment newsFragment, clazzFragment, departmentFragment;
+    private Fragment[] fragments;
+    private int lastIndex;
+
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         initView(root);
-        initStart(root);
-        initData();
-        setBanner(root);
-        TabLayout tab = root.findViewById(R.id.home_tab);
-        tab.addTab(tab.newTab().setText("咨询"));
-        tab.addTab(tab.newTab().setText("班级"));
         return root;
     }
-    private void setBanner(View view){
-        View viewBanner = LayoutInflater.from(view.getContext()).inflate(R.layout.item_header_banner, honeNewsList, false);
-        Banner banner = viewBanner.findViewById(R.id.home_banner);
-        honeNewsList.addHeaderView(viewBanner);
-        banner.setAdapter(bannerImageAdapter)
-                .addBannerLifecycleObserver(this)//添加生命周期观察者
-                .setIndicator(new CircleIndicator(view.getContext()));
-        banner.start();
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        // TODO: Use the ViewModel
+        init();
+        initListener();
     }
 
-    private void initStart(View view) {
-        honeNewsList.setAdapter(adapter);
-        honeNewsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    // 设置首页tab监听
+    private void initListener() {
+        homeTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ArticleActivity.actionStart(data.get(position - 1).getId());
-            }
-        });
-        homeRefreshLayout.setEnableRefresh(false);
-        homeRefreshLayout.setRefreshFooter(new ClassicsFooter(view.getContext()));
-        homeRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                initData();
-            }
-        });
-
-
-    }
-
-    private void initData() {
-
-        viewModel.getData().observe(this, new Observer<List<NewsBean>>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onChanged(List<NewsBean> newsBeans) {
-                if (isLoading == 0) {
-                    homeLoading.setVisibility(View.GONE);
-                    homeRefreshLayout.setVisibility(View.VISIBLE);
-                    isLoading++;
+            public void onTabSelected(TabLayout.Tab tab) {
+                int tId = tab.getPosition();
+                switch (tId){
+                    case 0:
+                        if (lastIndex != 0){
+                            switchFragment(lastIndex, 0);
+                            lastIndex = 0;
+                        }
+                        break;
+                    case 1:
+                        if (lastIndex != 1){
+                            switchFragment(lastIndex, 1);
+                            lastIndex = 1;
+                        }
+                        break;
+                    case 2:
+                        if (lastIndex != 2){
+                            switchFragment(lastIndex, 2);
+                            lastIndex = 2;
+                        }
+                        break;
                 }
-                Log.e("观察着", "收到数据更新");
-                homeRefreshLayout.finishLoadMore(true);
-                adapter.setNewsBean(newsBeans);
-                data = newsBeans;
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+    }
 
+    private void init() {
+        homeTab.addTab(homeTab.newTab().setText("咨询"));
+        homeTab.addTab(homeTab.newTab().setText("班级"));
+        homeTab.addTab(homeTab.newTab().setText("院部"));
+        // 设置咨询页面为第一页
+        getFragmentManager().beginTransaction().replace(R.id.home_fragment, newsFragment).show(newsFragment).commit();
     }
 
     private void initView(View view) {
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        honeNewsList = view.findViewById(R.id.hone_news_list);
-        homeRefreshLayout = (SmartRefreshLayout) view.findViewById(R.id.home_refreshLayout);
-        homeLoading = (TextView) view.findViewById(R.id.home_loading);
-        data = new ArrayList<>();
-        adapter = new NewsAdapter(view.getContext(), data);
+        homeSearch = (EditText) view.findViewById(R.id.home_search);
+        homeTab = (TabLayout) view.findViewById(R.id.home_tab);
+        newsFragment = NewsFragment.newInstance();
+        clazzFragment = ClazzFragment.newInstance();
+        departmentFragment = DepartmentFragment.newInstance();
+        context = view.getContext();
+        fragments = new Fragment[]{newsFragment, clazzFragment, departmentFragment};
 
-        bannerData = new ArrayList<>();
-        bannerData.add(new BannerBean(1, "1", "https://i.loli.net/2020/12/09/UCFyNItO5HEPf3T.jpg"));
-        bannerData.add(new BannerBean(2, "2", "https://i.loli.net/2020/12/09/c5NwmuExXSQUvdW.jpg"));
-        bannerData.add(new BannerBean(3, "3", "https://i.loli.net/2020/12/09/iXQZeRymtvVbY1F.jpg"));
-        bannerImageAdapter = new BannerImageAdapter(bannerData);
+    }
+
+    private void switchFragment(int lastIndex, int index){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.hide(fragments[lastIndex]);
+        if (!fragments[index].isAdded()){
+            transaction.add(R.id.home_fragment, fragments[index]);
+        }
+        transaction.show(fragments[index]).commitAllowingStateLoss();
     }
 }

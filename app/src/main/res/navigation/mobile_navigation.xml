@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="cn.hnvist.client.ui.fragment.home.HomeFragment"
+        android:name="cn.hnvist.client.ui.fragment.home.tab.news.NewsFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_news" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
