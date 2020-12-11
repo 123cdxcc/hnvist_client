@@ -1,5 +1,7 @@
 package cn.hnvist.client.ui.fragment.dashboard;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.hnvist.client.R;
+import cn.hnvist.client.ui.fragment.dashboard.tab.InformFragment;
 import cn.hnvist.client.ui.fragment.home.HomeFragment;
 import cn.hnvist.client.ui.fragment.notifications.NotificationsFragment;
 
 public class DashboardFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
-    HomeFragment homeFragment;
+    InformFragment informFragment;
     NotificationsFragment notificationsFragment;
     String [] strings={"联系人","陌生人"};
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,10 +36,13 @@ public class DashboardFragment extends Fragment {
         tabLayout=view.findViewById(R.id.id_xiaoxi_tab_layout);
         viewPager.setOrientation(viewPager.ORIENTATION_HORIZONTAL);
         List<Fragment> fragments=new ArrayList<>();
-        homeFragment=new HomeFragment();
+        informFragment=new InformFragment();
         notificationsFragment=new NotificationsFragment();
-        fragments.add(homeFragment);
+        fragments.add(informFragment);
         fragments.add(notificationsFragment);
+        tabLayout.setTabIndicatorFullWidth(false);
+        tabLayout.setSelectedTabIndicatorColor(Color.BLACK);
+        tabLayout.setTabRippleColor(ColorStateList.valueOf(getContext().getResources().getColor(R.color.Colorless)));
         viewPager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
@@ -54,6 +60,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 tab.setText(strings[position]);
+
             }
         }).attach();
         return view;
@@ -62,6 +69,5 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 }
